@@ -1,38 +1,61 @@
 import React, { Component } from 'react';
+import giphy from 'giphy-api'
 
-import SearchBar from './components/SearchBar';
-import Gif from './components/Gif.jsx';
+import SearchBar from './components/search_bar';
+import Gif from './components/gif.jsx';
+import GifList from './components/gif_list.jsx';
 
 
 class App extends Component {
   state = {
-    gifs: [],  // this will be filled with the query
-    selectedGifId: null
+    gifs: [],
+    selectedGifId: 'xT9IgDEI1iZyb2wqo8'
   }
 
-  // handleClick = () => {
-  //   this.setState({ selectedGifId: …})
+  // search = (query) => {
+  //   const GIPHY_API_KEY = 'uMLBUqFZMtocuuUL4oHGXaBlrACck2v0'
+  //   const giphEndpoint = `https://api.giphy.com/v1/gifs/search?api_key=${GIPHY_API_KEY}&q=${query}&limit=10`
+  //   fetch(giphEndpoint).then(response => response.json()).then((data) => {
+  //     const gifs = data.data.map(giph => giph.id)
+  //     this.setState({ gifs: gifs });
+  //   });
   // }
 
-  // handleKey = () => {
-  //   this.setState({ gifs: …})
-  // }
+  search = (query) => {
+    giphy('uMLBUqFZMtocuuUL4oHGXaBlrACck2v0').search({
+        q: query,
+        limit: 10,
+        rating: 'g'
+    }, (error, result) => {
+      this.setState({
+        gifs: result.data
+      });
+    });
+  }
+
+  selectedGif = (id) => {
+    this.setState({
+      selectedGifId: id
+    });
+  }
 
   render() {
+    //this.search("disney"); // for test purposes
+    const { gifs, selectedGifId} = this.state
+
     return (
       <div>
         <div className="left-scene">
-          <SearchBar />
+          <SearchBar search={this.search}/>
           {/*Gif component*/}
           <div className="selected-gif">
-            <Gif />
+            <Gif
+              id={selectedGifId} />
           </div>
         </div>
         <div className="right-scene">
           {/*Gif List component*/}
-          <div className="gif-list">
-            <div className="gif"></div>
-          </div>
+          <GifList gifs={gifs} selectedGif={this.selectedGif}/>
         </div>
       </div>
     );

@@ -9,8 +9,10 @@ import GifList from './components/gif_list.jsx';
 class App extends Component {
   state = {
     gifs: [],
-    selectedGifId: 'xT9IgDEI1iZyb2wqo8'
+    selectedGifId: null //'xT9IgDEI1iZyb2wqo8'
   }
+
+
 
   // search = (query) => {
   //   const GIPHY_API_KEY = 'uMLBUqFZMtocuuUL4oHGXaBlrACck2v0'
@@ -21,7 +23,7 @@ class App extends Component {
   //   });
   // }
 
-  search = (query) => {
+  search(query) {
     giphy('uMLBUqFZMtocuuUL4oHGXaBlrACck2v0').search({
         q: query,
         limit: 10,
@@ -33,6 +35,18 @@ class App extends Component {
     });
   }
 
+  // search = (query) => {
+  //   giphy('uMLBUqFZMtocuuUL4oHGXaBlrACck2v0').search({
+  //       q: query,
+  //       limit: 10,
+  //       rating: 'g'
+  //   }, (error, result) => {
+  //     this.setState({
+  //       gifs: result.data
+  //     });
+  //   });
+  // }
+
   selectedGif = (id) => {
     this.setState({
       selectedGifId: id
@@ -41,21 +55,21 @@ class App extends Component {
 
   render() {
     //this.search("disney"); // for test purposes
-    const { gifs, selectedGifId} = this.state
+    //const { gifs, selectedGifId} = this.state
 
     return (
       <div>
         <div className="left-scene">
-          <SearchBar search={this.search}/>
+          <SearchBar search={this.search.bind(this)}/>
           {/*Gif component*/}
           <div className="selected-gif">
             <Gif
-              id={selectedGifId} />
+              id={this.state.selectedGifId} />
           </div>
         </div>
         <div className="right-scene">
           {/*Gif List component*/}
-          <GifList gifs={gifs} selectedGif={this.selectedGif}/>
+          <GifList gifs={this.state.gifs} selectedGif={this.selectedGif}/>
         </div>
       </div>
     );

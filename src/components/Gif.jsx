@@ -2,25 +2,20 @@ import React, { Component} from 'react';
 
 class Gif extends Component {
   handleClick = () => {
-    if (this.props.selectedGif) {
-      const { id } = this.props
+    const { id, selectedGif } = this.props
+    if (selectedGif) {
       this.props.selectedGif(id);
     }
-    // console.log(id)
-    // console.log(selectedFunction(id))
-    // console.log(typeof(id))
-    //this.setState({ selectedGifId: id});
-    // selectedFunction(id);
-
-
-
-    //this.selectedFunction('xT9IgDEI1iZyb2wqo8')
-
   }
 
   render() {
+
     const { id } = this.props
     const src = `https://media3.giphy.com/media/${id}/200.gif`
+    // guard clause
+    if(!id) {
+      return null;
+    }
 
     return (
       <img
